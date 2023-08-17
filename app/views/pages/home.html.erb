@@ -1,0 +1,50 @@
+
+<div class="container" data-controller="home">
+  <div class="input-group mb-3">
+    <%= form_with(model: @transaction, local: true) do |f| %>
+      <span class="input-group-text" id="basic-addon1">
+        <%= f.label '$', class: 'me-2' %>
+        <%= f.text_field :amount, class: "form-control me-2", placeholder: "amount", data: { action: "input->home#onInput" } %>
+        <%= f.select :crypto, Transaction::ALLOWED_CRYPTOS, { selected: Transaction::ALLOWED_CRYPTOS[0] }, class: "form-select", data: { action: "change->home#onChange" } %>
+      </span>
+      <div class="text-center mt-1">
+        <small class="text-secondary">conversion: <span class='text-dark' id='convertion'>0 BTC </span></small><br/>
+        <small class="text-secondary">proyeccion anual: <span class="text-info" id='profit'> $0 - 0 BTC </span></small>
+      </div>
+      <div class='text-center'>
+        <%= f.submit 'Invertir', class: 'btn btn-outline-success btn-lg mt-3' %>
+      </div>
+    <% end %>
+  </div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Initial Balance</th>
+        <th scope="col">Profit in Crypto</th>
+        <th scope="col">Profit in Dollars</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">1</th>
+        <td><%= @btc_transaction.sum(&:crypto_amount)%> <span>BTC</span></td>
+        <td><%= @btc_transaction.sum(&:profit_crypto)%> <span>BTC</span></td>
+        <td><%= @btc_transaction.sum(&:profit_usd)%> <span>USD</span></td>
+      </tr>
+      <tr>
+        <th scope="row">2</th>
+        <td><%= @eth_transaction.sum(&:crypto_amount)%> <span>ETH</span></td>
+        <td><%= @eth_transaction.sum(&:profit_crypto)%> <span>ETH</span></td>
+        <td><%= @eth_transaction.sum(&:profit_usd)%> <span>USD</span></td>
+      </tr>
+      <tr>
+        <th scope="row">3</th>
+        <td><%= @ada_transaction.sum(&:crypto_amount)%> <span>ADA</span></td>
+        <td><%= @ada_transaction.sum(&:profit_crypto)%> <span>ADA</span></td>
+        <td><%= @ada_transaction.sum(&:profit_usd)%> <span>USD</span></td>
+      </tr>
+    </tbody>
+  </table>
+  
+</div>
